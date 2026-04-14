@@ -25,6 +25,8 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Middleware : ajoute _id = id sur tous les objets des réponses JSON
 // (compatibilité frontend qui utilise la convention MongoDB _id)
 function addIdAlias(data) {
+  // Convertit les instances Sequelize en objet plain avant tout
+  if (data && typeof data.toJSON === 'function') data = data.toJSON();
   if (Array.isArray(data)) return data.map(addIdAlias);
   if (data && typeof data === 'object' && !Buffer.isBuffer(data)) {
     const out = {};
